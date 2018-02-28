@@ -143,7 +143,8 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+    total: PropTypes.number
   }
 
   /**
@@ -170,7 +171,8 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    onIndexChanged: () => null
+    onIndexChanged: () => null,
+    total:-1
   }
 
   /**
@@ -222,6 +224,8 @@ export default class extends Component {
     }
 
     initState.total = props.children ? props.children.length || 1 : 0
+
+    if(props.total != -1) initState.total = props.total
 
     if (state.total === initState.total && !updateIndex) {
       // retain the index
@@ -694,7 +698,7 @@ export default class extends Component {
         pages.push('0')
       }
 
-      pages = pages.map((page, i) => {
+      pages = pages.filter((_, i) => i < total).map((page, i) => {
         if (loadMinimal) {
           if (i >= (index + loopVal - loadMinimalSize) &&
             i <= (index + loopVal + loadMinimalSize)) {
